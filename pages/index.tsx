@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Head from "next/head";
 
 const to = "test@test.de";
@@ -24,17 +25,17 @@ const replaceReturns = (value: string, returns: string) => {
 
 const createLink = (raw: string, returns: string, index: number) => {
   return (
-    <li>
-      <a href={createMailTo(returns, index)}>
-        <code>{raw}</code>
-        {" -> "}
-        <code>{encodeURI(returns)}</code>
-      </a>
-    </li>
+    <a href={createMailTo(returns, index)}>
+      <code>{raw}</code>
+      {" -> "}
+      <code>{encodeURI(returns)}</code>
+    </a>
   );
 };
 
 export default function Home() {
+  const [customLink, setCustomLink] = useState("");
+
   return (
     <html>
       <Head>
@@ -58,10 +59,11 @@ export default function Home() {
               ["\\n", "\n"],
               ["\\r\\n", "\r\n"],
               ["<br>", "<br>"],
-            ].map(([raw, returns], index) => createLink(raw, returns, index))}
+            ].map(([raw, returns], index) => (
+              <li>{createLink(raw, returns, index)}</li>
+            ))}
           </ol>
           <h2>How it is supposed to look</h2>
-
           <h3>To</h3>
           <pre>
             <code>{to}</code>
@@ -74,6 +76,23 @@ export default function Home() {
           <pre>
             <code>{body}</code>
           </pre>
+          <h2>Bring your own link</h2>
+
+          <p>
+            Goto <a href="https://mailtolink.me/">mailtolink.me</a> and copy
+            your link
+          </p>
+          <div>
+            <input
+              onChange={(e) => setCustomLink(e.target.value)}
+              value={customLink}
+              type="text"
+              name="mailto"
+              id="custom_mailto"
+              placeholder="mailto:..."
+            />
+            <a href={customLink}>{"--> Your link <-- "}</a>
+          </div>
         </main>
       </body>
     </html>
