@@ -5,6 +5,7 @@ const to = "test@test.de";
 const subject = `email test `;
 const body = `
 Hello,
+Whats up ÜüÄä
 
 Bye
 
